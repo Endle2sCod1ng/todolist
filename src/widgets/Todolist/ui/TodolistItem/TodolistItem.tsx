@@ -1,15 +1,19 @@
 import { AppButton } from "@/shared/ui/AppButton/AppButton";
-import type { Task } from "../../model/tasks";
+import type { FilterType, Task } from "../../model/tasks";
 
 interface TodolistItemProps {
   title: string;
   tasks: Task[];
+  deleteTask: (taksId: string) => void;
+  changeFilter: (filter: FilterType) => void;
   className?: string;
 }
 export const TodolistItem = ({
   title,
   tasks,
   className,
+  deleteTask,
+  changeFilter,
 }: TodolistItemProps) => {
   return (
     <>
@@ -33,14 +37,17 @@ export const TodolistItem = ({
                     onChange={() => {}}
                   />
                   <span>{t.title}</span>
+                  <AppButton onClick={() => deleteTask(t.id)}>x</AppButton>
                 </li>
               );
             })}
           </ul>
           <div>
-            <AppButton>All</AppButton>
-            <AppButton>Active</AppButton>
-            <AppButton>Completed</AppButton>
+            <AppButton onClick={() => changeFilter("all")}>All</AppButton>
+            <AppButton onClick={() => changeFilter("active")}>Active</AppButton>
+            <AppButton onClick={() => changeFilter("completed")}>
+              Completed
+            </AppButton>
           </div>
         </div>
       )}
