@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FilterType, Task } from "../../model/tasks";
 import { TodolistItem } from "../TodolistItem/TodolistItem";
+import { v1 } from "uuid";
 
 interface TodolistProps {
   className?: string;
@@ -8,9 +9,9 @@ interface TodolistProps {
 export const Todolist = ({ className }: TodolistProps) => {
   const [filter, setFilter] = useState<FilterType>("all");
   const [tasks, setTasks] = useState<Task[]>([
-    { id: "1", title: "HTML&CSS", isDone: true },
-    { id: "2", title: "JS", isDone: true },
-    { id: "3", title: "ReactJS", isDone: false },
+    { id: v1(), title: "HTML&CSS", isDone: true },
+    { id: v1(), title: "JS", isDone: true },
+    { id: v1(), title: "ReactJS", isDone: false },
   ]);
 
   // const tasks2 = [
@@ -22,7 +23,14 @@ export const Todolist = ({ className }: TodolistProps) => {
 
   const deleteTask = (taksId: string) => {
     setTasks([...tasks.filter((t) => t.id !== taksId)]);
-    console.log(tasks);
+  };
+  const createTask = (title: string) => {
+    const newTask: Task = {
+      id: v1(),
+      title: title,
+      isDone: false,
+    };
+    setTasks([newTask, ...tasks]);
   };
 
   const changeFilter = (filter: FilterType) => {
@@ -42,6 +50,7 @@ export const Todolist = ({ className }: TodolistProps) => {
       <TodolistItem
         title="What to learn"
         tasks={filtredTasks}
+        createTask={createTask}
         deleteTask={deleteTask}
         changeFilter={changeFilter}
       />
