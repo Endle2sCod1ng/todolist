@@ -33,6 +33,18 @@ export const Todolist = ({ className }: TodolistProps) => {
     setTasks([newTask, ...tasks]);
   };
 
+  const changeTaskStatus = ({
+    taskId,
+    isDone,
+  }: {
+    taskId: string;
+    isDone: boolean;
+  }) => {
+    setTasks([
+      ...tasks.map((t) => (t.id === taskId ? { ...t, isDone } : t)),
+    ]);    
+  };
+
   const changeFilter = (filter: FilterType) => {
     setFilter(filter);
   };
@@ -52,7 +64,9 @@ export const Todolist = ({ className }: TodolistProps) => {
         tasks={filtredTasks}
         createTask={createTask}
         deleteTask={deleteTask}
+        changeTaskStatus={changeTaskStatus}
         changeFilter={changeFilter}
+        filter={filter}
       />
       {/* <TodolistItem
         title="Songs"
