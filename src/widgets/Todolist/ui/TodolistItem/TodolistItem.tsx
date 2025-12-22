@@ -1,9 +1,9 @@
-import { useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { type ChangeEvent } from "react";
 import { AppButton } from "@/shared/ui/AppButton/AppButton";
 import type { Task } from "../../model/task";
 import type { FilterValues } from "../../model/todolist";
 import s from "./TodolistItem.module.scss";
-
+import { CreateItemForm } from "@/feature/CreateItemForm";
 
 interface TodolistItemProps {
   title: string;
@@ -40,6 +40,14 @@ interface TodolistItemProps {
     todolistId: string;
     filter: FilterValues;
   }) => void;
+  deleteTodolist: (todolistId: string) => void;
+  chnageTodolistTitle: ({
+    todolistId,
+    title,
+  }: {
+    todolistId: string;
+    title: string;
+  }) => void;
   className?: string;
 }
 export const TodolistItem = ({
@@ -51,112 +59,96 @@ export const TodolistItem = ({
   deleteTask,
   changeTaskStatus,
   changeFilter,
+  deleteTodolist,
+  chnageTodolistTitle,
   className,
 }: TodolistItemProps) => {
   // const inputRef = useRef<HTMLInputElement>(null);
-  const [taskTitle, setTaskTitle] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
 
-  const createTaskHandler = () => {
-    const trimTitle = taskTitle.trim();
-    if (trimTitle !== "") {
-      createTask({ todolistId, title: trimTitle });
-      setTaskTitle("");
-    } else {
-      setError("Title is requred");
-    }
+  const createTaskHandler = (title: string) => {
+    createTask({ todolistId, title });
   };
 
   return (
-      <div className={`${className ? className : ""}`}>
-        <h3>{title}</h3>
-        <div>
+    <div className={`${className ? className : ""}`}>
+      <div className={s.titleWrapper}>
+        <>
+          <h3>{title}</h3>
           <input
-            className={`${error && s.error}`}
-            //  ref={inputRef}
-            value={taskTitle}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setTaskTitle(e.currentTarget.value);
-              setError(null);
-            }}
-            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") {
-                createTaskHandler();
-              }
-            }}
+            type="text"
+            value={title}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              chnageTodolistTitle({ todolistId, title: e.currentTarget.value })
+            }
           />
-          <AppButton
-            onClick={() => {
-              createTaskHandler();
-            }}
-          >
-            +
-          </AppButton>
-          {error && <div className={s.errorMessage}>{error}</div>}
-        </div>
-        {tasks.length === 0 ? (
-          <p>{"Tasks not found"}</p>
-        ) : (
-          <>
-            <ul>
-              {tasks.map((t) => {
-                const changeTaskStatusHandler = (
-                  e: ChangeEvent<HTMLInputElement>
-                ) => {
-                  changeTaskStatus({
-                    todolistId,
-                    taskId: t.id,
-                    isDone: e.currentTarget.checked,
-                  });
-                };
-                return (
-                  <li
-                    key={crypto.randomUUID()}
-                    className={`${t.isDone ? s.isDone : ""}`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={t.isDone}
-                      onChange={changeTaskStatusHandler}
-                    />
-                    <span>{t.title}</span>
-                    <AppButton
-                      onClick={() => deleteTask({ todolistId, taskId: t.id })}
-                    >
-                      x
-                    </AppButton>
-                  </li>
-                );
-              })}
-            </ul>
-            <div>
-              <AppButton
-                onClick={() =>
-                  changeFilter({ todolistId: todolistId, filter: "all" })
-                }
-                className={filter === "all" ? s.activeFilter : ""}
-              >
-                All
-              </AppButton>
-              <AppButton
-                onClick={() =>
-                  changeFilter({ todolistId: todolistId, filter: "active" })
-                }
-                className={filter === "active" ? s.activeFilter : ""}
-              >
-                Active
-              </AppButton>
-              <AppButton
-                onClick={() =>
-                  changeFilter({ todolistId: todolistId, filter: "completed" })
-                }
-                className={filter === "completed" ? s.activeFilter : ""}
-              >
-                Completed
-              </AppButton>
-            </div>
-          </>
-        )}
+        </>
+        <AppButton onClick={() => deleteTodolist(todolistId)}>{"x"}</AppButton>
       </div>
+      <CreateItemForm createItem={createTaskHandler} />
+
+      {tasks.length === 0 ? (
+        <p>{"Tasks not found"}</p>
+      ) : (
+        <>
+          <ul>
+            {tasks.map((t) => {
+              const changeTaskStatusHandler = (
+                e: ChangeEvent<HTMLInputElement>
+              ) => {
+                changeTaskStatus({
+                  todolistId,
+                  taskId: t.id,
+                  isDone: e.currentTarget.checked,
+                });
+              };
+              return (
+                <li
+                  key={crypto.randomUUID()}
+                  className={`${t.isDone ? s.isDone : ""}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={t.isDone}
+                    onChange={changeTaskStatusHandler}
+                  />
+                  <span>{t.title}</span>
+                  <AppButton
+                    onClick={() => deleteTask({ todolistId, taskId: t.id })}
+                  >
+                    x
+                  </AppButton>
+                </li>
+              );
+            })}
+          </ul>
+          <div>
+            <AppButton
+              onClick={() =>
+                changeFilter({ todolistId: todolistId, filter: "all" })
+              }
+              className={filter === "all" ? s.activeFilter : ""}
+            >
+              All
+            </AppButton>
+            <AppButton
+              onClick={() =>
+                changeFilter({ todolistId: todolistId, filter: "active" })
+              }
+              className={filter === "active" ? s.activeFilter : ""}
+            >
+              Active
+            </AppButton>
+            <AppButton
+              onClick={() =>
+                changeFilter({ todolistId: todolistId, filter: "completed" })
+              }
+              className={filter === "completed" ? s.activeFilter : ""}
+            >
+              Completed
+            </AppButton>
+          </div>
+        </>
+      )}
+    </div>
   );
 };

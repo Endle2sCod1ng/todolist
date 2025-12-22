@@ -4,6 +4,7 @@ import type { FilterValues, TodolistType } from "../../model/todolist";
 import { TodolistItem } from "../TodolistItem/TodolistItem";
 import { v1 } from "uuid";
 import { Container } from "@/shared/ui/Container/Container";
+import { CreateItemForm } from "@/feature/CreateItemForm";
 
 interface TodolistProps {
   className?: string;
@@ -88,8 +89,38 @@ export const Todolist = ({ className }: TodolistProps) => {
     ]);
   };
 
+  const deleteTodolist = (todolistId: string) => {
+    setTodolists([...todolists.filter((tl) => tl.id !== todolistId)]);
+    const updateTasks = { ...tasks };
+    delete updateTasks[todolistId];
+    setTasks({ ...updateTasks });
+  };
+
+  const createTodolist = (title: string) => {
+    const newTodolistId = v1();
+    const newTodolist: TodolistType = {
+      id: newTodolistId,
+      title,
+      filter: "all",
+    };
+    setTodolists([newTodolist, ...todolists]);
+    setTasks({ [newTodolistId]: [], ...tasks });
+  };
+
+  const chnageTodolistTitle = ({
+    todolistId,
+    title,
+  }: {
+    todolistId: string;
+    title: string;
+  }) => {
+    setTodolists([
+      ...todolists.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl)),
+    ]);
+  };
   return (
     <Container className={`${className ? className : ""}`}>
+      <CreateItemForm createItem={createTodolist} />
       {todolists.map((tl) => {
         let filtredTasks = tasks[tl.id];
 
@@ -111,6 +142,8 @@ export const Todolist = ({ className }: TodolistProps) => {
             changeTaskStatus={changeTaskStatus}
             changeFilter={changeFilter}
             filter={tl.filter}
+            deleteTodolist={deleteTodolist}
+            chnageTodolistTitle={chnageTodolistTitle}
           />
         );
       })}
