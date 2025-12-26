@@ -4,6 +4,7 @@ import type { Task } from "../../model/task";
 import type { FilterValues } from "../../model/todolist";
 import s from "./TodolistItem.module.scss";
 import { CreateItemForm } from "@/feature/CreateItemForm";
+import { EditableSpan } from "@/feature/EditableSpan/inex";
 
 interface TodolistItemProps {
   title: string;
@@ -68,18 +69,17 @@ export const TodolistItem = ({
   const createTaskHandler = (title: string) => {
     createTask({ todolistId, title });
   };
+  const chnageTodolistTitleHandler = (title: string) => {
+    chnageTodolistTitle({ todolistId, title });
+  };
 
   return (
     <div className={`${className ? className : ""}`}>
       <div className={s.titleWrapper}>
         <>
-          <h3>{title}</h3>
-          <input
-            type="text"
+          <EditableSpan
             value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              chnageTodolistTitle({ todolistId, title: e.currentTarget.value })
-            }
+            onChange={chnageTodolistTitleHandler}
           />
         </>
         <AppButton onClick={() => deleteTodolist(todolistId)}>{"x"}</AppButton>
@@ -111,6 +111,7 @@ export const TodolistItem = ({
                     checked={t.isDone}
                     onChange={changeTaskStatusHandler}
                   />
+                  {/* <EditableSpan value={t.title} /> */}
                   <span>{t.title}</span>
                   <AppButton
                     onClick={() => deleteTask({ todolistId, taskId: t.id })}
