@@ -76,6 +76,25 @@ export const Todolist = ({ className }: TodolistProps) => {
       ],
     });
   };
+  const changeTaskTitle = ({
+    todolistId,
+    taskId,
+    title,
+  }: {
+    todolistId: string;
+    taskId: string;
+    title: string;
+  }) => {
+    console.log("changeTaskTitle");
+    setTasks({
+      ...tasks,
+      [todolistId]: [
+        ...tasks[todolistId].map((t) =>
+          t.id === taskId ? { ...t, title } : t
+        ),
+      ],
+    });
+  };
 
   const changeFilter = ({
     todolistId,
@@ -114,6 +133,8 @@ export const Todolist = ({ className }: TodolistProps) => {
     todolistId: string;
     title: string;
   }) => {
+    console.log();
+    
     setTodolists([
       ...todolists.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl)),
     ]);
@@ -140,6 +161,7 @@ export const Todolist = ({ className }: TodolistProps) => {
             createTask={createTask}
             deleteTask={deleteTask}
             changeTaskStatus={changeTaskStatus}
+            changeTaskTitle={changeTaskTitle}
             changeFilter={changeFilter}
             filter={tl.filter}
             deleteTodolist={deleteTodolist}

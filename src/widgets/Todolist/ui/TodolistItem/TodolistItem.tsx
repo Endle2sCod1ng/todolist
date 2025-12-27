@@ -34,6 +34,15 @@ interface TodolistItemProps {
     taskId: string;
     isDone: boolean;
   }) => void;
+  changeTaskTitle: ({
+    todolistId,
+    taskId,
+    title,
+  }: {
+    todolistId: string;
+    taskId: string;
+    title: string;
+  }) => void;
   changeFilter: ({
     todolistId,
     filter,
@@ -59,6 +68,7 @@ export const TodolistItem = ({
   createTask,
   deleteTask,
   changeTaskStatus,
+  changeTaskTitle,
   changeFilter,
   deleteTodolist,
   chnageTodolistTitle,
@@ -101,18 +111,23 @@ export const TodolistItem = ({
                   isDone: e.currentTarget.checked,
                 });
               };
+              const chnageTaskTitleHandler = (title: string) => {
+                changeTaskTitle({ todolistId, taskId: t.id, title });
+              };
               return (
                 <li
                   key={crypto.randomUUID()}
-                  className={`${t.isDone ? s.isDone : ""}`}
+                  className={`${s.taskItem} ${t.isDone ? s.isDone : ""}`}
                 >
                   <input
                     type="checkbox"
                     checked={t.isDone}
                     onChange={changeTaskStatusHandler}
                   />
-                  {/* <EditableSpan value={t.title} /> */}
-                  <span>{t.title}</span>
+                  <EditableSpan
+                    value={t.title}
+                    onChange={chnageTaskTitleHandler}
+                  />
                   <AppButton
                     onClick={() => deleteTask({ todolistId, taskId: t.id })}
                   >
