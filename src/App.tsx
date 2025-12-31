@@ -1,6 +1,7 @@
 import { Todolist } from "@/widgets/Todolist";
 import { useState } from "react";
 import { AppButton } from "./shared/ui/AppButton/AppButton";
+
 type Theme = "light" | "dark";
 
 export const App = () => {

@@ -5,6 +5,10 @@ import type { FilterValues } from "../../model/todolist";
 import s from "./TodolistItem.module.scss";
 import { CreateItemForm } from "@/feature/CreateItemForm";
 import { EditableSpan } from "@/feature/EditableSpan/inex";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MuiButton from "@mui/material/Button";
+import { Checkbox } from "@mui/material";
 
 interface TodolistItemProps {
   title: string;
@@ -92,7 +96,9 @@ export const TodolistItem = ({
             onChange={chnageTodolistTitleHandler}
           />
         </>
-        <AppButton onClick={() => deleteTodolist(todolistId)}>{"x"}</AppButton>
+        <IconButton onClick={() => deleteTodolist(todolistId)}>
+          <DeleteIcon />
+        </IconButton>
       </div>
       <CreateItemForm createItem={createTaskHandler} />
 
@@ -119,8 +125,7 @@ export const TodolistItem = ({
                   key={crypto.randomUUID()}
                   className={`${s.taskItem} ${t.isDone ? s.isDone : ""}`}
                 >
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     checked={t.isDone}
                     onChange={changeTaskStatusHandler}
                   />
@@ -128,40 +133,44 @@ export const TodolistItem = ({
                     value={t.title}
                     onChange={chnageTaskTitleHandler}
                   />
-                  <AppButton
+            
+                  <IconButton
                     onClick={() => deleteTask({ todolistId, taskId: t.id })}
                   >
-                    x
-                  </AppButton>
+                    <DeleteIcon />
+                  </IconButton>
                 </li>
               );
             })}
           </ul>
           <div>
-            <AppButton
+            <MuiButton
+              color="inherit"
               onClick={() =>
                 changeFilter({ todolistId: todolistId, filter: "all" })
               }
               className={filter === "all" ? s.activeFilter : ""}
             >
               All
-            </AppButton>
-            <AppButton
+            </MuiButton>
+            <MuiButton
+              color="primary"
               onClick={() =>
                 changeFilter({ todolistId: todolistId, filter: "active" })
               }
               className={filter === "active" ? s.activeFilter : ""}
             >
               Active
-            </AppButton>
-            <AppButton
+            </MuiButton>
+            <MuiButton
+              color="secondary"
               onClick={() =>
                 changeFilter({ todolistId: todolistId, filter: "completed" })
               }
               className={filter === "completed" ? s.activeFilter : ""}
             >
               Completed
-            </AppButton>
+            </MuiButton>
           </div>
         </>
       )}

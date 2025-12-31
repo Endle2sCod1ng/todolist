@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type KeyboardEvent } from "react";
 import s from "./EditableSpan.module.scss";
+import { TextField } from "@mui/material";
 interface EditableSpanProps {
   value: string;
   onChange: (title: string) => void;
@@ -11,7 +12,7 @@ export const EditableSpan = ({
   className,
 }: EditableSpanProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [text, setText] = useState<string>(value);
+  const [title, setTitle] = useState<string>(value);
 
   return (
     <div className={`${s.editableSpan} ${className ? className : ""}`}>
@@ -24,22 +25,25 @@ export const EditableSpan = ({
           {value}
         </span>
       ) : (
-        <input
-          value={text}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setText(e.currentTarget.value);
-            onChange(e.currentTarget.value);
-          }}
-          onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter") {
+          <TextField
+            variant={"outlined"}
+            value={title}
+            size={"small"}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setTitle(e.currentTarget.value);
+            }}
+            onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "Enter") {
+                setIsEdit(false);
+                onChange(title);
+              }
+            }}
+            onBlur={() => {
               setIsEdit(false);
-            }
-          }}
-          onBlur={() => {
-            setIsEdit(false);
-          }}
-          autoFocus
-        />
+              onChange(title);
+            }}
+            autoFocus
+          />
       )}
     </div>
   );

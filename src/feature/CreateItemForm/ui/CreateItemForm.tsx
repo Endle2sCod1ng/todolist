@@ -1,6 +1,9 @@
 import { useState, type ChangeEvent, type KeyboardEvent } from "react";
+import MuiButton from "@mui/material/Button";
+
 import s from "./CreateItemForm.module.scss";
-import { AppButton } from "@/shared/ui/AppButton/AppButton";
+import { TextField } from "@mui/material";
+
 interface CreateItemFormProps {
   createItem: (title: string) => void;
   className?: string;
@@ -9,26 +12,30 @@ export const CreateItemForm = ({
   createItem,
   className,
 }: CreateItemFormProps) => {
-  const [taskTitle, setTaskTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
   const createItemHandler = () => {
-    const trimTitle = taskTitle.trim();
+    const trimTitle = title.trim();
     if (trimTitle !== "") {
       createItem(trimTitle);
-      setTaskTitle("");
+      setTitle("");
     } else {
       setError("Title is requred");
     }
   };
   return (
-    <div className={`${className ? className : ""}`}>
-      <input
-        className={`${error && s.error}`}
-        //  ref={inputRef}
-        value={taskTitle}
+    <div className={`${s.createItemForm} ${className ? className : ""}`}>
+      <TextField
+        error={!!error}
+        helperText={error}
+        label={"Enter a title"}
+        variant={"outlined"}
+        className={error ? "error" : ""}
+        value={title}
+        size={"small"}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setTaskTitle(e.currentTarget.value);
+          setTitle(e.currentTarget.value);
           setError(null);
         }}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
@@ -37,13 +44,14 @@ export const CreateItemForm = ({
           }
         }}
       />
-      <AppButton
+      <MuiButton
+        variant="contained"
         onClick={() => {
           createItemHandler();
         }}
       >
         +
-      </AppButton>
+      </MuiButton>
       {error && <div className={s.errorMessage}>{error}</div>}{" "}
     </div>
   );

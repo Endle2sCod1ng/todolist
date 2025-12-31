@@ -85,7 +85,6 @@ export const Todolist = ({ className }: TodolistProps) => {
     taskId: string;
     title: string;
   }) => {
-    console.log("changeTaskTitle");
     setTasks({
       ...tasks,
       [todolistId]: [
@@ -133,8 +132,6 @@ export const Todolist = ({ className }: TodolistProps) => {
     todolistId: string;
     title: string;
   }) => {
-    console.log();
-    
     setTodolists([
       ...todolists.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl)),
     ]);
