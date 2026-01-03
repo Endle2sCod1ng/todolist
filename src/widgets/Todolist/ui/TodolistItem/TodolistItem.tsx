@@ -1,5 +1,5 @@
 import { type ChangeEvent } from "react";
-import { AppButton } from "@/shared/ui/AppButton/AppButton";
+
 import type { Task } from "../../model/task";
 import type { FilterValues } from "../../model/todolist";
 import s from "./TodolistItem.module.scss";
@@ -9,6 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MuiButton from "@mui/material/Button";
 import { Checkbox } from "@mui/material";
+
+import ListItem from "@mui/material/ListItem";
 
 interface TodolistItemProps {
   title: string;
@@ -88,7 +90,7 @@ export const TodolistItem = ({
   };
 
   return (
-    <div className={`${className ? className : ""}`}>
+    <ListItem className={`${s.todolistItem} ${className ? className : ""}`}>
       <div className={s.titleWrapper}>
         <>
           <EditableSpan
@@ -133,7 +135,7 @@ export const TodolistItem = ({
                     value={t.title}
                     onChange={chnageTaskTitleHandler}
                   />
-            
+
                   <IconButton
                     onClick={() => deleteTask({ todolistId, taskId: t.id })}
                   >
@@ -174,6 +176,6 @@ export const TodolistItem = ({
           </div>
         </>
       )}
-    </div>
+    </ListItem>
   );
 };

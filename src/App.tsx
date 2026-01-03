@@ -18,7 +18,7 @@ export const App = () => {
           </AppButton>
         }
       />
-      <main>
+      <main className="main">
         <Todolist />
       </main>
     </div>

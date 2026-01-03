@@ -6,6 +6,9 @@ import { v1 } from "uuid";
 import { Container } from "@/shared/ui/Container/Container";
 import { CreateItemForm } from "@/feature/CreateItemForm";
 
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+
 interface TodolistProps {
   className?: string;
 }
@@ -137,7 +140,7 @@ export const Todolist = ({ className }: TodolistProps) => {
     ]);
   };
   return (
-    <Container className={`${className ? className : ""}`}>
+    <List className={`${className ? className : ""}`}>
       <CreateItemForm createItem={createTodolist} />
       {todolists.map((tl) => {
         let filtredTasks = tasks[tl.id];
@@ -166,6 +169,6 @@ export const Todolist = ({ className }: TodolistProps) => {
           />
         );
       })}
-    </Container>
+    </List>
   );
 };

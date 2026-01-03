@@ -1,5 +1,7 @@
 .app_dark_theme {
   --bg-color:#242424;
+  --inverted-bg-color: #ccc;
   --primary-color:#eee;
+  --inverted-primary-color:#000;
 
 }

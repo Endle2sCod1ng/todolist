@@ -1,3 +1,10 @@
+.todolistItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
 .taskItem {
   display: flex;
   align-items: center;

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import s from "./Header.module.scss";
 
 interface HeaderProps {
   themeBtn: ReactNode;
@@ -6,7 +7,7 @@ interface HeaderProps {
 }
 export const Header = ({ themeBtn, className }: HeaderProps) => {
   return (
-    <header className={`${className ? className : ""}`}>
+    <header className={`${s.header} ${className ? className : ""}`}>
       <div>Header</div>
       {themeBtn}
     </header>

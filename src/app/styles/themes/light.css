@@ -1,4 +1,7 @@
 .app_light_theme {
   --bg-color: #ccc;
-  --primary-color:#000;
+  --inverted-bg-color: #242424;
+  --primary-color: #000;
+  --inverted-primary-color: #eee;
+
 }
