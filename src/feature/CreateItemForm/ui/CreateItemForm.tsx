@@ -1,8 +1,7 @@
 import { useState, type ChangeEvent, type KeyboardEvent } from "react";
-import MuiButton from "@mui/material/Button";
 
 import s from "./CreateItemForm.module.scss";
-import { TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 
 interface CreateItemFormProps {
   createItem: (title: string) => void;
@@ -44,14 +43,14 @@ export const CreateItemForm = ({
           }
         }}
       />
-      <MuiButton
-        variant="contained"
+      <IconButton
         onClick={() => {
           createItemHandler();
         }}
+        color={"primary"}
       >
         +
-      </MuiButton>
+      </IconButton>
       {error && <div className={s.errorMessage}>{error}</div>}{" "}
     </div>
   );

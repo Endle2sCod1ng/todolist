@@ -1,26 +1,36 @@
-import { Todolist } from "@/widgets/Todolist";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { MuiHeader } from "./widgets/Header/ui/MuiHeader";
+import { MuiTodolist } from "./widgets/Todolist/ui/Todolist/MuiTodolist";
 import { useState } from "react";
-import { AppButton } from "./shared/ui/AppButton/AppButton";
-import { Header } from "./widgets/Header";
 
-type Theme = "light" | "dark";
+export type MuiThemeMode = "dark" | "light";
 
 export const App = () => {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [themeMode, setThemeMode] = useState<MuiThemeMode>("light");
+
+  const muiTheme = createTheme({
+    palette: {
+      mode: themeMode,
+      primary: {
+        main: "#087EA4",
+      },
+    },
+  });
+
+  const changeMuiThemeMode = () => {
+    setThemeMode(themeMode === "light" ? "dark" : "light");
+  };
+
   return (
-    <div className={`app app_${theme}_theme`}>
-      <Header
-        themeBtn={
-          <AppButton
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {"Theme"}
-          </AppButton>
-        }
+    <ThemeProvider theme={muiTheme}>
+      <CssBaseline />
+      <MuiHeader
+        muiTheme={muiTheme}
+        changeMuiThemeMode={changeMuiThemeMode}
       />
       <main className="main">
-        <Todolist />
+        <MuiTodolist />
       </main>
-    </div>
+    </ThemeProvider>
   );
 };

@@ -1,16 +1,20 @@
 import { useState } from "react";
 import type { Task } from "../../model/task";
 import type { FilterValues, TodolistType } from "../../model/todolist";
-import { TodolistItem } from "../TodolistItem/TodolistItem";
-import { v1 } from "uuid";
 
 import { CreateItemForm } from "@/feature/CreateItemForm";
 
+import List from "@mui/material/List";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { MuiTodolistItem } from "../TodolistItem/MuiTodolistItem";
+import Paper from "@mui/material/Paper";
+import { v1 } from "uuid";
 
 interface TodolistProps {
   className?: string;
 }
-export const Todolist = ({ className }: TodolistProps) => {
+export const MuiTodolist = ({ className }: TodolistProps) => {
   const todolistId1 = v1();
   const todolistId2 = v1();
 
@@ -138,35 +142,50 @@ export const Todolist = ({ className }: TodolistProps) => {
     ]);
   };
   return (
-    <ul className={`${className ? className : ""}`}>
-      <CreateItemForm createItem={createTodolist} />
-      {todolists.map((tl) => {
-        let filtredTasks = tasks[tl.id];
+    <Container maxWidth={"lg"}>
+      <Grid
+        container
+        sx={{ mb: "30px" }}
+      >
+        <CreateItemForm createItem={createTodolist} />
+      </Grid>
+      <List className={`${className ? className : ""}`}>
+        <Grid
+          container
+          spacing={4}
+        >
+          {todolists.map((tl) => {
+            let filtredTasks = tasks[tl.id];
 
-        if (tl.filter === "active") {
-          filtredTasks = tasks[tl.id].filter((t) => !t.isDone);
-        }
-        if (tl.filter === "completed") {
-          filtredTasks = tasks[tl.id].filter((t) => t.isDone);
-        }
-
-        return (
-          <TodolistItem
-            key={tl.id}
-            todolistId={tl.id}
-            title={tl.title}
-            tasks={filtredTasks}
-            createTask={createTask}
-            deleteTask={deleteTask}
-            changeTaskStatus={changeTaskStatus}
-            changeTaskTitle={changeTaskTitle}
-            changeFilter={changeFilter}
-            filter={tl.filter}
-            deleteTodolist={deleteTodolist}
-            chnageTodolistTitle={chnageTodolistTitle}
-          />
-        );
-      })}
-    </ul>
+            if (tl.filter === "active") {
+              filtredTasks = tasks[tl.id].filter((t) => !t.isDone);
+            }
+            if (tl.filter === "completed") {
+              filtredTasks = tasks[tl.id].filter((t) => t.isDone);
+            }
+            return (
+              <Grid key={tl.id}>
+                <Paper sx={{ mb: "0 20px 20px 20px" }}>
+                  <MuiTodolistItem
+                    key={tl.id}
+                    todolistId={tl.id}
+                    title={tl.title}
+                    tasks={filtredTasks}
+                    createTask={createTask}
+                    deleteTask={deleteTask}
+                    changeTaskStatus={changeTaskStatus}
+                    changeTaskTitle={changeTaskTitle}
+                    changeFilter={changeFilter}
+                    filter={tl.filter}
+                    deleteTodolist={deleteTodolist}
+                    chnageTodolistTitle={chnageTodolistTitle}
+                  />
+                </Paper>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </List>
+    </Container>
   );
 };

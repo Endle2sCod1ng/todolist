@@ -8,7 +8,11 @@ import { EditableSpan } from "@/feature/EditableSpan/inex";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MuiButton from "@mui/material/Button";
-import { Checkbox } from "@mui/material";
+import { Checkbox, List } from "@mui/material";
+
+import ListItem from "@mui/material/ListItem";
+import Box from "@mui/material/Box";
+import { containerSx, getListItemSx } from "./TodolistItem.styles";
 
 interface TodolistItemProps {
   title: string;
@@ -64,7 +68,7 @@ interface TodolistItemProps {
   }) => void;
   className?: string;
 }
-export const TodolistItem = ({
+export const MuiTodolistItem = ({
   title,
   filter,
   tasks,
@@ -88,7 +92,7 @@ export const TodolistItem = ({
   };
 
   return (
-    <li className={`${s.todolistItem} ${className ? className : ""}`}>
+    <ListItem className={`${s.todolistItem} ${className ? className : ""}`}>
       <div className={s.titleWrapper}>
         <>
           <EditableSpan
@@ -106,7 +110,7 @@ export const TodolistItem = ({
         <p>{"Tasks not found"}</p>
       ) : (
         <>
-          <ul>
+          <List>
             {tasks.map((t) => {
               const changeTaskStatusHandler = (
                 e: ChangeEvent<HTMLInputElement>
@@ -121,10 +125,12 @@ export const TodolistItem = ({
                 changeTaskTitle({ todolistId, taskId: t.id, title });
               };
               return (
-                <li
+                <ListItem
+                  sx={getListItemSx(t.isDone)}
                   key={crypto.randomUUID()}
                   className={`${s.taskItem} ${t.isDone ? s.isDone : ""}`}
                 >
+                  <div></div>
                   <Checkbox
                     checked={t.isDone}
                     onChange={changeTaskStatusHandler}
@@ -139,11 +145,11 @@ export const TodolistItem = ({
                   >
                     <DeleteIcon />
                   </IconButton>
-                </li>
+                </ListItem>
               );
             })}
-          </ul>
-          <div>
+          </List>
+          <Box sx={containerSx}>
             <MuiButton
               color="inherit"
               onClick={() =>
@@ -171,9 +177,9 @@ export const TodolistItem = ({
             >
               Completed
             </MuiButton>
-          </div>
+          </Box>
         </>
       )}
-    </li>
+    </ListItem>
   );
 };
