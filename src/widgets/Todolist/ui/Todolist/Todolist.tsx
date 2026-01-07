@@ -1,11 +1,10 @@
 import { useState } from "react";
-import type { Task } from "../../model/task";
-import type { FilterValues, TodolistType } from "../../model/todolist";
+import type { Task } from "../../model/types/task";
+import type { FilterValues, TodolistType } from "../../model/types/todolist";
 import { TodolistItem } from "../TodolistItem/TodolistItem";
 import { v1 } from "uuid";
 
 import { CreateItemForm } from "@/feature/CreateItemForm";
-
 
 interface TodolistProps {
   className?: string;

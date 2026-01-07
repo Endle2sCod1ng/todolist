@@ -1,7 +1,7 @@
 import { type ChangeEvent } from "react";
 
-import type { Task } from "../../model/task";
-import type { FilterValues } from "../../model/todolist";
+import type { Task } from "../../model/types/task";
+import type { FilterValues } from "../../model/types/todolist";
 import s from "./TodolistItem.module.scss";
 import { CreateItemForm } from "@/feature/CreateItemForm";
 import { EditableSpan } from "@/feature/EditableSpan/inex";

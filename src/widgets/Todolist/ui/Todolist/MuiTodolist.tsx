@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Task } from "../../model/task";
-import type { FilterValues, TodolistType } from "../../model/todolist";
+import type { Task } from "../../model/types/task";
+import type { FilterValues, TodolistType } from "../../model/types/todolist";
 
 import { CreateItemForm } from "@/feature/CreateItemForm";
 
@@ -18,6 +18,7 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
   const todolistId1 = v1();
   const todolistId2 = v1();
 
+  
   const [todolists, setTodolists] = useState<TodolistType[]>([
     { id: todolistId1, title: "What to learns", filter: "all" },
     { id: todolistId2, title: "What to read", filter: "all" },
