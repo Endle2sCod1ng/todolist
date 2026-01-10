@@ -1,6 +1,6 @@
-import { useState } from "react";
-import type { Task } from "../../model/types/task";
-import type { FilterValues, TodolistType } from "../../model/types/todolist";
+import { useReducer, useState } from "react";
+import type { Task, TasksState } from "../../model/types/task";
+import type { FilterValues } from "../../model/types/todolist";
 
 import { CreateItemForm } from "@/feature/CreateItemForm";
 
@@ -10,6 +10,13 @@ import Grid from "@mui/material/Grid";
 import { MuiTodolistItem } from "../TodolistItem/MuiTodolistItem";
 import Paper from "@mui/material/Paper";
 import { v1 } from "uuid";
+import {
+  changeTodolistFilterAC,
+  changeTodolistTitleAC,
+  createTodolistAC,
+  deleteTodolistAC,
+  todolistsReducer,
+} from "../../model/reducers/todolistsReducer";
 
 interface TodolistProps {
   className?: string;
@@ -18,13 +25,9 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
   const todolistId1 = v1();
   const todolistId2 = v1();
 
-  
-  const [todolists, setTodolists] = useState<TodolistType[]>([
-    { id: todolistId1, title: "What to learns", filter: "all" },
-    { id: todolistId2, title: "What to read", filter: "all" },
-  ]);
+  const [todolists, dispatchToTodolists] = useReducer(todolistsReducer, []);
 
-  const [tasks, setTasks] = useState<{ [key: string]: Task[] }>({
+  const [tasks, setTasks] = useState<TasksState>({
     [todolistId1]: [
       { id: v1(), title: "HTML&CSS", isDone: true },
       { id: v1(), title: "JS", isDone: true },
@@ -82,6 +85,7 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
       ],
     });
   };
+
   const changeTaskTitle = ({
     todolistId,
     taskId,
@@ -108,27 +112,20 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
     todolistId: string;
     filter: FilterValues;
   }) => {
-    setTodolists([
-      ...todolists.map((tl) => (tl.id === todolistId ? { ...tl, filter } : tl)),
-    ]);
+    dispatchToTodolists(changeTodolistFilterAC({ id: todolistId, filter }));
   };
 
   const deleteTodolist = (todolistId: string) => {
-    setTodolists([...todolists.filter((tl) => tl.id !== todolistId)]);
+    dispatchToTodolists(deleteTodolistAC(todolistId));
     const updateTasks = { ...tasks };
     delete updateTasks[todolistId];
     setTasks({ ...updateTasks });
   };
 
   const createTodolist = (title: string) => {
-    const newTodolistId = v1();
-    const newTodolist: TodolistType = {
-      id: newTodolistId,
-      title,
-      filter: "all",
-    };
-    setTodolists([newTodolist, ...todolists]);
-    setTasks({ [newTodolistId]: [], ...tasks });
+    const action = createTodolistAC(title);
+    dispatchToTodolists(action);
+    setTasks({ ...tasks, [action.payload.id]: [] });
   };
 
   const chnageTodolistTitle = ({
@@ -138,10 +135,9 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
     todolistId: string;
     title: string;
   }) => {
-    setTodolists([
-      ...todolists.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl)),
-    ]);
+    dispatchToTodolists(changeTodolistTitleAC({ id: todolistId, title }));
   };
+
   return (
     <Container maxWidth={"lg"}>
       <Grid
