@@ -1,21 +1,43 @@
+import { v1 } from "uuid";
 import type { TasksState } from "../types/task";
 import type { CreateTodolistAction, DeleteTodolistAction } from "./todolistsReducer";
 
 const initialState: TasksState = {};
 
-type Actions = CreateTodolistAction | DeleteTodolistAction;
+export const deleteTaskAC = ({ todolistId, taskId }: { todolistId: string, taskId: string; }) => {
+  return { type: "delete_task", payload: { todolistId, taskId } } as const;
+};
+
+export const createTaskAC = ({ todolistId, title }: { todolistId: string, title: string; }) => {
+  return {
+    type: "create_task", payload: {
+      todolistId, title
+    }
+  } as const;
+};
+
+export type DeleteTaskAction = ReturnType<typeof deleteTaskAC>;
+export type CreateTaskAction = ReturnType<typeof createTaskAC>;
+
+type Actions = CreateTodolistAction | DeleteTodolistAction | DeleteTaskAction | CreateTaskAction;
 
 export const tasksReducer = (state: TasksState = initialState, action: Actions): TasksState => {
- switch (action.type) {
-  case 'create_todolist': {
-   return { ...state, [action.payload.id]: [] };
+  switch (action.type) {
+    case 'create_todolist': {
+      return { ...state, [action.payload.id]: [] };
+    }
+    case "delete_todolist": {
+      const newState = { ...state };
+      delete newState[action.payload.id];
+      return newState;
+    }
+    case "delete_task": {
+      return { ...state, [action.payload.todolistId]: [...state[action.payload.todolistId].filter(t => t.id !== action.payload.taskId)] };
+    }
+    case "create_task": {
+      return { ...state, [action.payload.todolistId]: [{ id: v1(), title: action.payload.title, isDone: false }, ...state[action.payload.todolistId]] };
+    }
+    default:
+      return state;
   }
-  case "delete_todolist": {
-   const newState = { ...state };
-   delete newState[action.payload.id];
-   return newState;
-  }
-  default:
-   return state;
- }
 };

@@ -4,15 +4,10 @@ import type { FilterValues, TodolistType } from "../types/todolist";
 const todolistId1 = v1();
 const todolistId2 = v1();
 
-
-
-
 const initialState: TodolistType[] = [
   { id: todolistId1, title: "What to learns", filter: "all" },
   { id: todolistId2, title: "What to read", filter: "all" },
 ];
-
-
 
 export const deleteTodolistAC = (id: string) => {
   return { type: 'delete_todolist', payload: { id } } as const;
