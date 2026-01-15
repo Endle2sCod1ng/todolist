@@ -111,7 +111,7 @@ export const MuiTodolistItem = ({
       ) : (
         <>
           <List>
-            {tasks.map((t) => {
+            {tasks?.map((t) => {
               const changeTaskStatusHandler = (
                 e: ChangeEvent<HTMLInputElement>
               ) => {

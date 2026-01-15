@@ -1,8 +1,8 @@
 import { v1 } from "uuid";
 import type { FilterValues, TodolistType } from "../types/todolist";
 
-const todolistId1 = v1();
-const todolistId2 = v1();
+const todolistId1 = "todolistId1";
+const todolistId2 = "todolistId2";
 
 const initialState: TodolistType[] = [
   { id: todolistId1, title: "What to learns", filter: "all" },
