@@ -23,6 +23,8 @@ import {
 import type { RootState } from "@/app/providers/StoreProvider/store/store";
 import type { TasksState } from "../../model/types/task";
 import { useAppDispatch, useAppSelector } from "@/shared/hooks/hooks";
+import { selectTodolists } from "../../model/selectors/todolistsSelectors";
+import { selectTasks } from "../../model/selectors/tasksSelectors";
 
 interface TodolistProps {
   className?: string;
@@ -30,10 +32,8 @@ interface TodolistProps {
 export const MuiTodolist = ({ className }: TodolistProps) => {
   const dispatch = useAppDispatch();
 
-  const todolists = useAppSelector<RootState, TodolistType[]>(
-    (state) => state.todolists
-  );
-  const tasks = useAppSelector<RootState, TasksState>((state) => state.tasks);
+  const todolists = useAppSelector<RootState, TodolistType[]>(selectTodolists);
+  const tasks = useAppSelector<RootState, TasksState>(selectTasks);
 
   const deleteTask = ({
     todolistId,
@@ -90,7 +90,7 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
   };
 
   const deleteTodolist = (todolistId: string) => {
-    dispatch(deleteTodolistAC(todolistId));
+    dispatch(deleteTodolistAC({ id: todolistId }));
     const updateTasks = { ...tasks };
     delete updateTasks[todolistId];
     // setTasks({ ...updateTasks });

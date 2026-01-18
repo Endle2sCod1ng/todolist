@@ -1,4 +1,4 @@
-import { v1 } from "uuid";
+import { nanoid } from "@reduxjs/toolkit";
 import type { TasksState } from "../types/task";
 import type { CreateTodolistAction, DeleteTodolistAction } from "./todolistsReducer";
 
@@ -24,7 +24,7 @@ export const deleteTaskAC = ({ todolistId, taskId }: { todolistId: string, taskI
 
 export const createTaskAC = ({ todolistId, title }: { todolistId: string, title: string; }) => {
   return {
-    type: "create_task", 
+    type: "create_task",
     payload: {
       todolistId, title
     }
@@ -70,7 +70,7 @@ export const tasksReducer = (state: TasksState = initialState, action: Actions):
       return { ...state, [action.payload.todolistId]: [...state[action.payload.todolistId].filter(t => t.id !== action.payload.taskId)] };
     }
     case "create_task": {
-      return { ...state, [action.payload.todolistId]: [{ id: v1(), title: action.payload.title, isDone: false }, ...state[action.payload.todolistId]] };
+      return { ...state, [action.payload.todolistId]: [{ id: nanoid(), title: action.payload.title, isDone: false }, ...state[action.payload.todolistId]] };
     }
     case "chnage_task_status": {
       return { ...state, [action.payload.todolistId]: [...state[action.payload.todolistId].map(t => t.id === action.payload.taskId ? { ...t, isDone: action.payload.isDone } : t)] };
