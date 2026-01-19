@@ -19,7 +19,7 @@ import {
   changeTaskTitleAC,
   createTaskAC,
   deleteTaskAC,
-} from "../../model/reducers/tasks-reducer";
+} from "../../model/reducers/tasksReducer";
 import type { RootState } from "@/app/providers/StoreProvider/store/store";
 import type { TasksState } from "../../model/types/task";
 import { useAppDispatch, useAppSelector } from "@/shared/hooks/hooks";
@@ -91,16 +91,11 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
 
   const deleteTodolist = (todolistId: string) => {
     dispatch(deleteTodolistAC({ id: todolistId }));
-    const updateTasks = { ...tasks };
-    delete updateTasks[todolistId];
-    // setTasks({ ...updateTasks });
   };
 
   const createTodolist = (title: string) => {
     const action = createTodolistAC(title);
     dispatch(action);
-    dispatch(createTodolistAC(title));
-    // setTasks({ ...tasks, [action.payload.id]: [] });
   };
 
   const chnageTodolistTitle = ({

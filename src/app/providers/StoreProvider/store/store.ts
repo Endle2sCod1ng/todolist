@@ -1,4 +1,4 @@
-import { tasksReducer } from "@/widgets/Todolist/model/reducers/tasks-reducer";
+import { tasksReducer } from "@/widgets/Todolist/model/reducers/tasksReducer";
 import { todolistsReducer } from "@/widgets/Todolist/model/reducers/todolistsReducer";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
