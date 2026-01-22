@@ -33,7 +33,6 @@ export const tasksReducer = createReducer(initialState, builder => {
     state[action.payload.id] = [];
   }).addCase(deleteTodolistAC, (state, actoin) => {
     delete state[actoin.payload.id];
-  
   }).addCase(deleteTaskAC, (state, action) => {
     const index = state[action.payload.todolistId].findIndex(t => t.id === action.payload.taskId);
     state[action.payload.todolistId].splice(index, 1);

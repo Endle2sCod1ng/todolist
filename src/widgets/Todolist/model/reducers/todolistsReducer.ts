@@ -21,10 +21,9 @@ export const changeTodolistFilterAC = createAction<{ id: string, filter: FilterV
 
 export const todolistsReducer = createReducer(initialState, builder => {
   builder.addCase(deleteTodolistAC, (state, action) => {
-    const index = state.findIndex(tl =>tl.id === action.payload.id)
-
+    const index = state.findIndex(tl => tl.id === action.payload.id);
     if (index !== -1) {
-      state.slice(index, 1);
+      state.splice(index, 1);
     }
   }).addCase(createTodolistAC, (state, action) => {
     state.push({ ...action.payload, filter: "all" });

@@ -6,18 +6,30 @@ import Container from "@mui/material/Container";
 import { containerSx } from "./MuiHeader.styles";
 import { MuiNavButton } from "@/shared/ui/MuiNavButton/MuiNavButton";
 import { Switch } from "@mui/material";
-import type { Theme } from "@mui/material/styles";
+import { useAppDispatch, useAppSelector } from "@/shared/hooks/hooks";
+import { getTheme } from "@/app/providers/MuiThemeProvider/MuiTheme";
+import { changeMuiThemeModeAC } from "@/app/model/reducers/appReducer";
+import { selectApp } from "@/app/model/selectors/appSelectors";
+
 
 interface HeaderProps {
-  muiTheme: Theme;
-  changeMuiThemeMode: () => void;
   className?: string;
 }
 export const MuiHeader = ({
-  muiTheme,
-  changeMuiThemeMode,
   className,
 }: HeaderProps) => {
+  const dispatch = useAppDispatch();
+
+    const { themeMode } = useAppSelector(selectApp);
+    const muiTheme = getTheme(themeMode);
+  
+    const changeMuiThemeMode = () => {
+      dispatch(
+        changeMuiThemeModeAC({
+          themeMode: themeMode === "light" ? "dark" : "light",
+        }),
+      );
+    };
   return (
     <AppBar
       className={`${className ? className : ""}`}

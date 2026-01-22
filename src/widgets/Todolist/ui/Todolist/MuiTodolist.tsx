@@ -1,30 +1,16 @@
-import type { FilterValues, TodolistType } from "../../model/types/todolist";
-
 import { CreateItemForm } from "@/feature/CreateItemForm";
-
 import List from "@mui/material/List";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { MuiTodolistItem } from "../TodolistItem/MuiTodolistItem";
 import Paper from "@mui/material/Paper";
-
-import {
-  changeTodolistFilterAC,
-  changeTodolistTitleAC,
-  createTodolistAC,
-  deleteTodolistAC,
-} from "../../model/reducers/todolistsReducer";
-import {
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  createTaskAC,
-  deleteTaskAC,
-} from "../../model/reducers/tasksReducer";
-import type { RootState } from "@/app/providers/StoreProvider/store/store";
-import type { TasksState } from "../../model/types/task";
+import {createTodolistAC} from "../../model/reducers/todolistsReducer";
 import { useAppDispatch, useAppSelector } from "@/shared/hooks/hooks";
 import { selectTodolists } from "../../model/selectors/todolistsSelectors";
 import { selectTasks } from "../../model/selectors/tasksSelectors";
+import type { RootState } from "@/app/providers/StoreProvider/store/store";
+import type { TodolistType } from "../../model/types/todolist";
+import type { TasksState } from "../../model/types/task";
 
 interface TodolistProps {
   className?: string;
@@ -35,77 +21,9 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
   const todolists = useAppSelector<RootState, TodolistType[]>(selectTodolists);
   const tasks = useAppSelector<RootState, TasksState>(selectTasks);
 
-  const deleteTask = ({
-    todolistId,
-    taskId,
-  }: {
-    todolistId: string;
-    taskId: string;
-  }) => {
-    dispatch(deleteTaskAC({ taskId, todolistId }));
-  };
-
-  const createTask = ({
-    todolistId,
-    title,
-  }: {
-    todolistId: string;
-    title: string;
-  }) => {
-    dispatch(createTaskAC({ todolistId, title }));
-  };
-
-  const changeTaskStatus = ({
-    todolistId,
-    taskId,
-    isDone,
-  }: {
-    todolistId: string;
-    taskId: string;
-    isDone: boolean;
-  }) => {
-    dispatch(changeTaskStatusAC({ todolistId, taskId, isDone }));
-  };
-
-  const changeTaskTitle = ({
-    todolistId,
-    taskId,
-    title,
-  }: {
-    todolistId: string;
-    taskId: string;
-    title: string;
-  }) => {
-    dispatch(changeTaskTitleAC({ todolistId, taskId, title }));
-  };
-
-  const changeFilter = ({
-    todolistId,
-    filter,
-  }: {
-    todolistId: string;
-    filter: FilterValues;
-  }) => {
-    dispatch(changeTodolistFilterAC({ id: todolistId, filter }));
-  };
-
-  const deleteTodolist = (todolistId: string) => {
-    dispatch(deleteTodolistAC({ id: todolistId }));
-  };
-
   const createTodolist = (title: string) => {
     const action = createTodolistAC(title);
     dispatch(action);
-  };
-
-  const chnageTodolistTitle = ({
-    todolistId,
-    title,
-  }: {
-    todolistId: string;
-    title: string;
-  }) => {
-    dispatch(changeTodolistTitleAC({ id: todolistId, title }));
   };
 
   return (
@@ -138,14 +56,8 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
                     todolistId={tl.id}
                     title={tl.title}
                     tasks={filtredTasks}
-                    createTask={createTask}
-                    deleteTask={deleteTask}
-                    changeTaskStatus={changeTaskStatus}
-                    changeTaskTitle={changeTaskTitle}
-                    changeFilter={changeFilter}
                     filter={tl.filter}
-                    deleteTodolist={deleteTodolist}
-                    chnageTodolistTitle={chnageTodolistTitle}
+               
                   />
                 </Paper>
               </Grid>
