@@ -6,6 +6,8 @@ import ListItem from "@mui/material/ListItem";
 import { useAppDispatch } from "@/shared/hooks/hooks";
 import { createTaskAC } from "../../model/reducers/tasksReducer";
 import { TasksList } from "./ui/TasksList";
+
+
 import type { FilterValues } from "../../model/types/todolist";
 
 interface TodolistItemProps {
@@ -22,6 +24,8 @@ export const MuiTodolistItem = ({
   todolistId,
   className,
 }: TodolistItemProps) => {
+
+  
   const dispatch = useAppDispatch();
 
   const createTask = ({
@@ -36,7 +40,6 @@ export const MuiTodolistItem = ({
   const createTaskHandler = (title: string) => {
     createTask({ todolistId, title });
   };
-
   return (
     <ListItem className={`${s.todolistItem} ${className ? className : ""}`}>
       <TodolistTitle

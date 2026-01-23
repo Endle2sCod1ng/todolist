@@ -28,6 +28,7 @@ export const TasksList = ({
             {tasks?.map((t) => {
               return (
                 <TaskItem
+                  key={crypto.randomUUID()}
                   todolistId={todolistId}
                   t={t}
                 />

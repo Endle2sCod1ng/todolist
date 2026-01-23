@@ -1,4 +1,4 @@
-import { MuiTodolist } from "@/widgets/Todolist/ui/Todolist/MuiTodolist";
+import { MuiTodolist } from "@/widgets/Todolist/ui/Todolist/Todolist";
 
 export const Main = () => {
   return (

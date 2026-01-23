@@ -5,3 +5,10 @@ export interface TodolistType {
   title: string;
   filter: FilterValues;
 }
+
+export type Todolist = {
+  id: string;
+  title: string;
+  addedDate: string;
+  order: number;
+};
