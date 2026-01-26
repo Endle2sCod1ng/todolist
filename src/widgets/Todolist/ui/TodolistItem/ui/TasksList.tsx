@@ -1,4 +1,4 @@
-import type { FilterValues } from "../../../model/types/todolist";
+import type { FilterValues } from "@/widgets/Todolist/model/types/filter";
 import { List } from "@mui/material";
 
 import type { Task } from "@/widgets/Todolist/model/types/task";

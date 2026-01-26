@@ -1,7 +1,4 @@
-import { type ChangeEvent } from "react";
-
 import type { Task } from "../../model/types/task";
-import type { FilterValues } from "../../model/types/todolist";
 import s from "./TodolistItem.module.scss";
 import { CreateItemForm } from "@/feature/CreateItemForm";
 import { EditableSpan } from "@/feature/EditableSpan";
@@ -9,51 +6,53 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MuiButton from "@mui/material/Button";
 import { Checkbox } from "@mui/material";
+// import { type ChangeEvent } from "react";
+// import type { FilterValues } from "../../model/types/filter";
 
 interface TodolistItemProps {
   title: string;
   filter: string;
   todolistId: string;
   tasks: Task[];
-  createTask: ({
-    todolistId,
-    title,
-  }: {
-    todolistId: string;
-    title: string;
-  }) => void;
-  deleteTask: ({
-    todolistId,
-    taskId,
-  }: {
-    todolistId: string;
-    taskId: string;
-  }) => void;
-  changeTaskStatus: ({
-    todolistId,
-    taskId,
-    isDone,
-  }: {
-    todolistId: string;
-    taskId: string;
-    isDone: boolean;
-  }) => void;
-  changeTaskTitle: ({
-    todolistId,
-    taskId,
-    title,
-  }: {
-    todolistId: string;
-    taskId: string;
-    title: string;
-  }) => void;
-  changeFilter: ({
-    todolistId,
-    filter,
-  }: {
-    todolistId: string;
-    filter: FilterValues;
-  }) => void;
+  // createTask: ({
+  //   todolistId,
+  //   title,
+  // }: {
+  //   todolistId: string;
+  //   title: string;
+  // }) => void;
+  // deleteTask: ({
+  //   todolistId,
+  //   taskId,
+  // }: {
+  //   todolistId: string;
+  //   taskId: string;
+  // }) => void;
+  // changeTaskStatus: ({
+  //   todolistId,
+  //   taskId,
+  //   isDone,
+  // }: {
+  //   todolistId: string;
+  //   taskId: string;
+  //   isDone: boolean;
+  // }) => void;
+  // changeTaskTitle: ({
+  //   todolistId,
+  //   taskId,
+  //   title,
+  // }: {
+  //   todolistId: string;
+  //   taskId: string;
+  //   title: string;
+  // }) => void;
+  // changeFilter: ({
+  //   todolistId,
+  //   filter,
+  // }: {
+  //   todolistId: string;
+  //   filter: FilterValues;
+  // }) => void;
   deleteTodolist: (todolistId: string) => void;
   chnageTodolistTitle: ({
     todolistId,
@@ -69,20 +68,18 @@ export const TodolistItem = ({
   filter,
   tasks,
   todolistId,
-  createTask,
-  deleteTask,
-  changeTaskStatus,
-  changeTaskTitle,
-  changeFilter,
-  deleteTodolist,
+  // createTask,
+  // deleteTask,
+  // changeTaskStatus,
+  // changeTaskTitle,
+  // changeFilter,
   chnageTodolistTitle,
+  deleteTodolist,
   className,
 }: TodolistItemProps) => {
-  // const inputRef = useRef<HTMLInputElement>(null);
-
-  const createTaskHandler = (title: string) => {
-    createTask({ todolistId, title });
-  };
+  // const createTaskHandler = (title: string) => {
+  //   createTask({ todolistId, title });
+  // };
   const chnageTodolistTitleHandler = (title: string) => {
     chnageTodolistTitle({ todolistId, title });
   };
@@ -100,7 +97,10 @@ export const TodolistItem = ({
           <DeleteIcon />
         </IconButton>
       </div>
-      <CreateItemForm createItem={createTaskHandler} />
+      <CreateItemForm
+        createItem={() => {}}
+        // createItem={createTaskHandler}
+      />
 
       {tasks.length === 0 ? (
         <p>{"Tasks not found"}</p>
@@ -108,18 +108,18 @@ export const TodolistItem = ({
         <>
           <ul>
             {tasks.map((t) => {
-              const changeTaskStatusHandler = (
-                e: ChangeEvent<HTMLInputElement>,
-              ) => {
-                changeTaskStatus({
-                  todolistId,
-                  taskId: t.id,
-                  isDone: e.currentTarget.checked,
-                });
-              };
-              const chnageTaskTitleHandler = (title: string) => {
-                changeTaskTitle({ todolistId, taskId: t.id, title });
-              };
+              // const changeTaskStatusHandler = (
+              //   e: ChangeEvent<HTMLInputElement>,
+              // ) => {
+              //   changeTaskStatus({
+              //     todolistId,
+              //     taskId: t.id,
+              //     isDone: e.currentTarget.checked,
+              //   });
+              // };
+              // const chnageTaskTitleHandler = (title: string) => {
+              //   changeTaskTitle({ todolistId, taskId: t.id, title });
+              // };
               return (
                 <li
                   key={crypto.randomUUID()}
@@ -127,15 +127,16 @@ export const TodolistItem = ({
                 >
                   <Checkbox
                     checked={t.isDone}
-                    onChange={changeTaskStatusHandler}
+                    // onChange={changeTaskStatusHandler}
                   />
                   <EditableSpan
                     value={t.title}
-                    onChange={chnageTaskTitleHandler}
+                    // onChange={chnageTaskTitleHandler}
+                    onChange={() => {}}
                   />
 
                   <IconButton
-                    onClick={() => deleteTask({ todolistId, taskId: t.id })}
+                  // onClick={() => deleteTask({ todolistId, taskId: t.id })}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -146,27 +147,27 @@ export const TodolistItem = ({
           <div>
             <MuiButton
               color="inherit"
-              onClick={() =>
-                changeFilter({ todolistId: todolistId, filter: "all" })
-              }
+              // onClick={() =>
+              //   changeFilter({ todolistId: todolistId, filter: "all" })
+              // }
               className={filter === "all" ? s.activeFilter : ""}
             >
               All
             </MuiButton>
             <MuiButton
               color="primary"
-              onClick={() =>
-                changeFilter({ todolistId: todolistId, filter: "active" })
-              }
+              // onClick={() =>
+              //   changeFilter({ todolistId: todolistId, filter: "active" })
+              // }
               className={filter === "active" ? s.activeFilter : ""}
             >
               Active
             </MuiButton>
             <MuiButton
               color="secondary"
-              onClick={() =>
-                changeFilter({ todolistId: todolistId, filter: "completed" })
-              }
+              // onClick={() =>
+              //   changeFilter({ todolistId: todolistId, filter: "completed" })
+              // }
               className={filter === "completed" ? s.activeFilter : ""}
             >
               Completed

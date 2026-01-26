@@ -1,4 +1,5 @@
-import type { FilterValues, TodolistType } from "../types/todolist";
+import type { TodolistType } from "../types/todolist";
+import type { FilterValues } from "../types/filter";
 import { createAction, createReducer, nanoid } from "@reduxjs/toolkit";
 
 const todolistId1 = "todolistId1";

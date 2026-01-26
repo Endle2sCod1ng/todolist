@@ -1,7 +1,7 @@
 import MuiButton from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { containerSx } from "../TodolistItem.styles";
-import type { FilterValues } from "@/widgets/Todolist/model/types/todolist";
+import type { FilterValues } from "@/widgets/Todolist/model/types/filter";
 import { changeTodolistFilterAC } from "@/widgets/Todolist/model/reducers/todolistsReducer";
 import { useAppDispatch } from "@/shared/hooks/hooks";
 import s from "../TodolistItem.module.scss";

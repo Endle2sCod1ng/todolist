@@ -1,4 +1,4 @@
-export type FilterValues = "all" | "active" | "completed";
+import type { FilterValues } from "./filter";
 
 export interface TodolistType {
   id: string;
@@ -6,9 +6,14 @@ export interface TodolistType {
   filter: FilterValues;
 }
 
-export type Todolist = {
+export type TodolistApiType = {
   id: string;
   title: string;
   addedDate: string;
   order: number;
 };
+
+
+export interface TodolistTypeExtends extends TodolistApiType {
+  filter: FilterValues;
+}

@@ -1,9 +1,9 @@
-import { MuiTodolist } from "@/widgets/Todolist/ui/Todolist/Todolist";
+import { Todolist } from "@/widgets/Todolist/ui/Todolist/Todolist";
 
 export const Main = () => {
   return (
     <main className="main">
-      <MuiTodolist />
+      <Todolist />
     </main>
   );
 };

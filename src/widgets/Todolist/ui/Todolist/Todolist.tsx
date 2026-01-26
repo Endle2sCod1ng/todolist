@@ -2,27 +2,36 @@ import { CreateItemForm } from "@/feature/CreateItemForm";
 import List from "@mui/material/List";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { MuiTodolistItem } from "../TodolistItem/MuiTodolistItem";
+import { TodolistItem } from "../TodolistItem/TodolistItem";
 import Paper from "@mui/material/Paper";
 import { createTodolistAC } from "../../model/reducers/todolistsReducer";
 import { useAppDispatch, useAppSelector } from "@/shared/hooks/hooks";
 import { selectTodolists } from "../../model/selectors/todolistsSelectors";
 import { selectTasks } from "../../model/selectors/tasksSelectors";
 import type { RootState } from "@/app/providers/StoreProvider/store/store";
-import type { Todolist, TodolistType } from "../../model/types/todolist";
+import type {
+  TodolistType,
+  TodolistTypeExtends,
+} from "../../model/types/todolist";
+import type { TodolistApiType } from "../../model/types/todolist";
 import type { TasksState } from "../../model/types/task";
 import { useEffect, useState } from "react";
-import { createTodolistApi, token } from "../../model/api/api";
+import { apiKey, deleteTodolistApi, token } from "../../model/api/api";
 import axios from "axios";
+import type { FilterValues } from "../../model/types/filter";
+import type {
+  BaseResponse,
+} from "../../model/types/api";
 
 interface TodolistProps {
   className?: string;
 }
-export const MuiTodolist = ({ className }: TodolistProps) => {
-  const [tls, setTls] = useState<Todolist[]>([]);
+export const Todolist = ({ className }: TodolistProps) => {
+  const [tls, setTls] = useState<TodolistTypeExtends[]>([]);
+
   useEffect(() => {
     axios
-      .get<Todolist[]>(
+      .get<TodolistApiType[]>(
         "https://social-network.samuraijs.com/api/1.1/todo-lists",
         {
           headers: {
@@ -32,7 +41,12 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
       )
       .then((res) => {
         console.log(res.data);
-        setTls(res.data);
+        const filter: FilterValues = "all";
+        setTls([
+          ...res.data.map((tl) =>
+            tl === tl ? { ...tl, filter } : { ...tl, filter },
+          ),
+        ]);
       });
   }, []);
 
@@ -44,7 +58,48 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
   const createTodolist = (title: string) => {
     const action = createTodolistAC(title);
     dispatch(action);
-    createTodolistApi(title);
+    axios
+      .post<BaseResponse<{ item: TodolistApiType }>>(
+        "https://social-network.samuraijs.com/api/1.1/todo-lists",
+        { title },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "API-KEY": apiKey,
+          },
+        },
+      )
+      .then((res) => {
+        console.log(res.data);
+        const filter: FilterValues = "all";
+        setTls([...tls, { ...res.data.data.item, filter }]);
+      });
+  };
+
+  const deleteTodolist = (todolistId: string) => {
+    deleteTodolistApi(todolistId);
+    setTls([...tls.filter((tl) => tl.id !== todolistId)]);
+  };
+
+  const chnageTodolistTitle = ({
+    todolistId,
+    title,
+  }: {
+    todolistId: string;
+    title: string;
+  }) => {
+    axios
+      .put<BaseResponse>(
+        `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`,
+        { title },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "API-KEY": apiKey,
+          },
+        },
+      )
+      .then((res) => console.log(res.data));
   };
 
   return (
@@ -72,11 +127,13 @@ export const MuiTodolist = ({ className }: TodolistProps) => {
             return (
               <Grid key={tl.id}>
                 <Paper sx={{ mb: "0 20px 20px 20px" }}>
-                  <MuiTodolistItem
+                  <TodolistItem
                     key={tl.id}
                     todolistId={tl.id}
                     title={tl.title}
                     tasks={filtredTasks}
+                    deleteTodolist={deleteTodolist}
+                    chnageTodolistTitle={chnageTodolistTitle}
                     filter={tl.filter}
                   />
                 </Paper>

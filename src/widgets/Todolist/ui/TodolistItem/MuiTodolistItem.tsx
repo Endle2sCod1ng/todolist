@@ -7,8 +7,7 @@ import { useAppDispatch } from "@/shared/hooks/hooks";
 import { createTaskAC } from "../../model/reducers/tasksReducer";
 import { TasksList } from "./ui/TasksList";
 
-
-import type { FilterValues } from "../../model/types/todolist";
+import type { FilterValues } from "../../model/types/filter";
 
 interface TodolistItemProps {
   title: string;
@@ -17,15 +16,13 @@ interface TodolistItemProps {
   todolistId: string;
   className?: string;
 }
-export const MuiTodolistItem = ({
+export const TodolistItem = ({
   title,
   filter,
   tasks,
   todolistId,
   className,
 }: TodolistItemProps) => {
-
-  
   const dispatch = useAppDispatch();
 
   const createTask = ({
