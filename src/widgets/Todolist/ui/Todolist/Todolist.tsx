@@ -13,15 +13,11 @@ import type {
   TodolistType,
   TodolistTypeExtends,
 } from "../../model/types/todolist";
-import type { TodolistApiType } from "../../model/types/todolist";
 import type { TasksState } from "../../model/types/task";
 import { useEffect, useState } from "react";
-import { apiKey, deleteTodolistApi, token } from "../../model/api/api";
-import axios from "axios";
+import {  todolistApi } from "../../model/api/todolistsApi";
+
 import type { FilterValues } from "../../model/types/filter";
-import type {
-  BaseResponse,
-} from "../../model/types/api";
 
 interface TodolistProps {
   className?: string;
@@ -30,24 +26,15 @@ export const Todolist = ({ className }: TodolistProps) => {
   const [tls, setTls] = useState<TodolistTypeExtends[]>([]);
 
   useEffect(() => {
-    axios
-      .get<TodolistApiType[]>(
-        "https://social-network.samuraijs.com/api/1.1/todo-lists",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res.data);
-        const filter: FilterValues = "all";
-        setTls([
-          ...res.data.map((tl) =>
-            tl === tl ? { ...tl, filter } : { ...tl, filter },
-          ),
-        ]);
-      });
+    todolistApi.getTodolist().then((res) => {
+      console.log(res.data);
+      const filter: FilterValues = "all";
+      setTls([
+        ...res.data.map((tl) =>
+          tl === tl ? { ...tl, filter } : { ...tl, filter },
+        ),
+      ]);
+    });
   }, []);
 
   const dispatch = useAppDispatch();
@@ -58,27 +45,16 @@ export const Todolist = ({ className }: TodolistProps) => {
   const createTodolist = (title: string) => {
     const action = createTodolistAC(title);
     dispatch(action);
-    axios
-      .post<BaseResponse<{ item: TodolistApiType }>>(
-        "https://social-network.samuraijs.com/api/1.1/todo-lists",
-        { title },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "API-KEY": apiKey,
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res.data);
-        const filter: FilterValues = "all";
-        setTls([...tls, { ...res.data.data.item, filter }]);
-      });
+    todolistApi.createTodolist(title).then((res) => {
+      const filter: FilterValues = "all";
+      setTls([...tls, { ...res.data.data.item, filter }]);
+    });
   };
 
   const deleteTodolist = (todolistId: string) => {
-    deleteTodolistApi(todolistId);
-    setTls([...tls.filter((tl) => tl.id !== todolistId)]);
+    todolistApi
+      .deleteTodolist(todolistId)
+      .then(() => setTls([...tls.filter((tl) => tl.id !== todolistId)]));
   };
 
   const chnageTodolistTitle = ({
@@ -88,18 +64,11 @@ export const Todolist = ({ className }: TodolistProps) => {
     todolistId: string;
     title: string;
   }) => {
-    axios
-      .put<BaseResponse>(
-        `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`,
-        { title },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "API-KEY": apiKey,
-          },
-        },
-      )
-      .then((res) => console.log(res.data));
+    todolistApi
+      .changeTodolistTitle({ title, id: todolistId })
+      .then(() =>
+        setTls(tls.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl))),
+      );
   };
 
   return (
